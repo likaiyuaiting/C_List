@@ -1,0 +1,91 @@
+#include<stdio.h>
+#include<stdlib.h>
+typedef struct node
+{
+	int num;
+	struct node *nest;
+}Node;
+Node *newlink(int a[], int len)
+{
+	int i = 0;
+	Node *head = NULL;
+	Node *p = (Node*)malloc(sizeof(Node));
+	Node *q = NULL;
+	head = p;
+	for (i = 0; i < len;i++)
+	{ 
+		p->num = a[i];
+		p->nest = NULL;
+		q = p;
+		p = (Node*)malloc(sizeof(Node));	
+		q->nest = p;
+    }
+	p->nest = NULL;
+	return head;
+}
+void printlink(Node* head)
+{
+	while (head->nest!=NULL)
+	{
+		printf("%d\t",head->num);
+		head = head->nest;
+	}
+}
+Node* delkey(Node* head,int key)
+{
+	Node *p=head;
+	Node *q = head;
+	if (head->num == key)
+		head = head->nest;
+	while (p->num != key&&p->nest)
+	{
+		q = p;
+		p = p->nest;
+		//printf("%d\t", head->num);
+		//head = head->nest;
+	}
+
+	if (p->nest != NULL)
+		q->nest = p->nest;
+	return head;
+}
+void changelink(Node *head, int key1, int key2)
+{
+	Node *p = head;
+	Node *q = head;
+	if (head->num == key1)
+		head->num =key2;
+	while (p->num != key1&&p->nest)
+	{
+		q = p;
+		p = p->nest;
+		//printf("%d\t", head->num);
+		//head = head->nest;
+	}
+	if (p->nest != NULL)
+		q->num =key2;
+}
+int main(void)
+{
+	int a[] = { 1, 5, 4, 2, 7, 6, 9, 4 };
+	Node *head=NULL;
+	int key = 0;
+	int sz = sizeof(a) / sizeof(a[0]);
+
+	head=newlink(a,sz);
+
+	printlink(head);
+
+	key = 1;
+	head = delkey(head,key);
+	printf("\n");
+	printlink(head);
+
+	int key1 = 4, key2 = 9;
+	changelink(head,key1,key2);
+	printf("\n");
+	printlink(head);
+
+	system("pause");
+	return 0;
+}
